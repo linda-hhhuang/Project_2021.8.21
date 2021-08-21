@@ -1,0 +1,132 @@
+<div class="ml-8">
+  <!-- 展示当前申请表格 -->
+  <h3 nz-typography class="">当前申请</h3>
+  <nz-table #currentRequestInTable [nzPageSize]="10" nzShowQuickJumper [nzData]='currentDisplayRequestList!'>
+    <thead>
+      <tr>
+        <th nzCustomFilter>申请学生
+          <nz-filter-trigger [(nzVisible)]="visibleSearchSid" [nzActive]="searchSidValue.length > 0"
+            [nzDropdownMenu]="searchSidMenu">
+            <i nz-icon nzType="filter" nzTheme="twotone"></i>
+          </nz-filter-trigger>
+        </th>
+        <th>申请教师</th>
+        <th>申请教师类型</th>
+        <th>教师是否通过申请</th>
+        <th>申请状态
+          <nz-filter-trigger [(nzVisible)]="visibleSearchStatus" [nzDropdownMenu]="searchStatusMenu">
+            <i nz-icon nzType="filter" nzTheme="twotone"></i>
+          </nz-filter-trigger>
+        </th>
+        <th>操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of currentRequestInTable.data">
+        <td>{{ data.Student.name }} ({{ data.Student.sid }})</td>
+        <td *ngIf="data.manual">{{ data.manualTeacher }} </td>
+        <td *ngIf="!data.manual">{{ data.Teacher.name }} ({{ data.Teacher.sid}})</td>
+        <td>{{ data.manual?'校外教师':'校内教师' }}</td>
+        <td>{{ data.pass?"通过":"暂未通过"}}</td>
+        <td>{{ data.isDeleted?'已删除':'进行中' }}</td>
+        <td>
+          <a nz-button nzType="link" (click)="showModalShowInfo(data)" *ngIf="!data.manual">查看完整申请信息</a>
+          <nz-divider nzType="vertical" *ngIf="!data.manual"></nz-divider>
+          <a nz-button nzType="link" nz-popconfirm nzPopconfirmTitle="确定要通过此申请吗?" nzPopconfirmPlacement="bottom"
+            (nzOnConfirm)="passConfirm(data)" (nzOnCancel)="Cancel()" nzOkText="确认通过" nzCancelText="取消">代替教师强制通过此申请</a>
+          <nz-divider nzType="vertical"></nz-divider>
+          <a nz-button nzType="link" nz-popconfirm nzPopconfirmTitle="确定不通过此申请吗?" nzPopconfirmPlacement="bottom"
+            (nzOnConfirm)="deleteConfirm(data)" (nzOnCancel)="Cancel()" nzOkText="确认不通过" nzCancelText="取消">强制删除此申请</a>
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>
+
+  <!-- sid的搜索的下拉框 -->
+  <nz-dropdown-menu #searchSidMenu="nzDropdownMenu">
+    <div class="ant-table-filter-dropdown">
+      <div class="p-2">
+        <input class="w-44 mb-2 block" nz-input placeholder="按账户搜索" [(ngModel)]="searchSidValue" />
+        <button class="w-20 mr-4" nz-button nzSize="small" nzType="primary" (click)="searchSid()">
+          搜索
+        </button>
+        <button class="w-20" nz-button nzSize="small" (click)="resetSid()">重置</button>
+      </div>
+    </div>
+  </nz-dropdown-menu>
+
+  <!-- 查看完整信息的对话框 -->
+  <nz-modal [nzStyle]="{ width: '80%' }" [(nzVisible)]="isVisibleShowInfo" nzTitle="查看申请信息"
+    (nzOnOk)="handleOkShowInfo()" (nzOnCancel)="handleOkShowInfo()" [nzOkLoading]="isOkLoadingShowInfo">
+    <ng-container *nzModalContent>
+
+      <nz-descriptions nzTitle="申请相关信息" nzBordered class="mt-4">
+        <nz-descriptions-item nzTitle="申请id">{{currentSelectedRequest.rid}}</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="是否已删除">{{currentSelectedRequest.isDeleted?'是':'否'}}</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="教师是否已通过">{{currentSelectedRequest.pass?'是':'否'}}</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="教师是否为校外教师">{{currentSelectedRequest.manual?'是':'否'}}</nz-descriptions-item>
+      </nz-descriptions>
+
+      <nz-descriptions nzTitle="申请课程教师信息" nzBordered class="mt-4">
+        <nz-descriptions-item nzTitle="工号">{{currentSelectedRequest.Teacher.sid}}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="姓名">{{currentSelectedRequest.Teacher.name}}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="联系方式">{{currentSelectedRequest.Teacher.contact}}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="研究所">{{currentSelectedRequest.Teacher.institute}}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="院系">{{currentSelectedRequest.Teacher.department}}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="单位">{{currentSelectedRequest.Teacher.organization}}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="职称">{{currentSelectedRequest.Teacher.job}}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="研究方向">{{currentSelectedRequest.Teacher.direction}}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="招收学生数">{{currentSelectedRequest.Teacher.maxRes}}
+        </nz-descriptions-item>
+      </nz-descriptions>
+
+      <nz-descriptions nzTitle="申请学生信息" nzBordered class="mt-4">
+        <nz-descriptions-item nzTitle="学号">{{currentSelectedRequest.Student.sid}}</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="姓名">{{currentSelectedRequest.Student.name}}</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="专业">{{currentSelectedRequest.Student.major}}</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="院系">{{currentSelectedRequest.Student.department}}</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="学科门类">{{currentSelectedRequest.Student.field}}</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="是否双学位">{{currentSelectedRequest.Student.doubleDegree?'是':'否'}}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="双学位所在专业">{{currentSelectedRequest.Student.doubleDegreeMajor}}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="双学位所在院系">{{currentSelectedRequest.Student.doubleDegreeDepartment}}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="最大申请数">{{currentSelectedRequest.Student.maxReq}}</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="论文选题">{{currentSelectedRequest.Student.topicName}}</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="论文选题类型">{{currentSelectedRequest.Student.topicType}}</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="是否社会实践类">{{currentSelectedRequest.Student.topicSocialExp?'是':'否' }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="个人介绍">{{currentSelectedRequest.Student.info}}</nz-descriptions-item>
+      </nz-descriptions>
+
+    </ng-container>
+    <div *nzModalFooter>
+      <button nz-button nzType="default" (click)="handleOkShowInfo()">退出</button>
+    </div>
+  </nz-modal>
+
+  <!-- 申请状态的搜索的下拉框 -->
+  <nz-dropdown-menu #searchStatusMenu="nzDropdownMenu">
+    <div class="ant-table-filter-dropdown">
+      <div class="p-2">
+        <nz-radio-group class="mb-2 block" [(ngModel)]="searchStatusValue">
+          <label nz-radio nzValue="true">已删除</label>
+          <label nz-radio class="ml-4" nzValue="false">进行中</label>
+        </nz-radio-group>
+        <button class="w-20 mr-4" nz-button nzSize="small" nzType="primary" (click)="searchStatus()">
+          搜索
+        </button>
+        <button class="w-20" nz-button nzSize="small" (click)="resetStatus()">重置</button>
+      </div>
+    </div>
+  </nz-dropdown-menu>
+</div>
