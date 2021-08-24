@@ -32,13 +32,13 @@ export class TAGuard implements CanActivate {
           // delay(0);
           console.log('ta.guard: role=0/1 : true(default)');
           return true;
-        } else if (role == 2 || role == 3) {
-          console.log('ta.guard: role=2/3 : ', this.userServ.hasmember);
+        } else if (role == 4) {
+          console.log('ta.guard: role=4 : ', this.userServ.hasmember);
           if (this.userServ.hasmember) {
             return true;
           } else {
-            this.message.error('此账号未被允许加入此系统,请联系教务部!');
-            return this.router.parseUrl('/home');
+            this.message.error('此准考证号未被允许加入此系统,请联系教务部!');
+            return this.router.parseUrl('/login');
           }
         } else {
           console.log('!!!!!!!!!! role 值错误 !!!!!!!!!');

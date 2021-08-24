@@ -3,9 +3,9 @@ import { RouterModule, Routes } from '@angular/router';
 import { StudentHomeComponent } from './components/student-home/student-home.component';
 import { StudentMainComponent } from './components/student-main/student-main.component';
 import { StudentPersonalComponent } from './components/student-personal/student-personal.component';
-import { StudentApplyComponent } from './components/student-apply/student-apply.component';
-import { StudentRequestComponent } from './components/student-request/student-request.component';
-import { StudentAllTeacherComponent } from './components/student-all-teacher/student-all-teacher.component';
+import { StudentCommentComponent } from './components/student-comment/student-comment.component';
+import { StudentScoreComponent } from './components/student-score/student-score.component';
+import { StudentUploadComponent } from './components/student-upload/student-upload.component';
 const routes: Routes = [
   {
     path: '',
@@ -18,16 +18,16 @@ const routes: Routes = [
         component: StudentPersonalComponent,
       },
       {
-        path: 'teacher',
-        component: StudentAllTeacherComponent,
+        path: 'comment',
+        component: StudentCommentComponent,
       },
       {
-        path: 'request',
-        component: StudentRequestComponent,
+        path: 'score',
+        component: StudentScoreComponent,
       },
       {
-        path: 'application',
-        component: StudentApplyComponent,
+        path: 'upload',
+        component: StudentUploadComponent,
       },
     ],
   },

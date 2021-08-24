@@ -1,0 +1,25 @@
+<button class="mt-2 ml-8 h-10 w-60" nz-button [nzType]="'primary'" (click)="showModalScore()"><span>查询成绩</span></button>
+
+<!-- 成绩的对话框 -->
+<nz-modal [nzStyle]="{ width: '60%' }" [(nzVisible)]="isVisibleScore" nzTitle="个人成绩" (nzOnCancel)="handleOkScore()"
+  (nzOnOk)="handleOkScore()" [nzOkLoading]="isOkLoadingScore">
+  <ng-container *nzModalContent>
+    <nz-descriptions nzTitle="" nzBordered>
+      <nz-descriptions-item nzTitle="姓名" nzSpan="2">
+        {{currentStudentInfo.name}} </nz-descriptions-item>
+      <nz-descriptions-item nzTitle="性别" nzSpan="1">
+        {{currentStudentInfo.sex}}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="准考证号" nzSpan="3">
+        {{currentStudentInfo.sid}} </nz-descriptions-item>
+      <nz-descriptions-item nzTitle="复试分数" nzSpan="3">
+        {{currentStudentInfo.score2}}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="录取结果" nzSpan="3">
+        {{currentStudentInfo.result}}</nz-descriptions-item>
+    </nz-descriptions>
+
+  </ng-container>
+
+  <div *nzModalFooter>
+    <button nz-button nzType="default" (click)="handleOkScore()">确认</button>
+  </div>
+</nz-modal>

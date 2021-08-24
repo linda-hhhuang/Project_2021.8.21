@@ -32,9 +32,7 @@ export class TARedirectComponent implements OnInit {
         console.log('in ta redirect ,role is ', role);
         if (role == 0 || role == 1) {
           this.router.navigate(['admin'], { relativeTo: this.route });
-        } else if (role == 2) {
-          this.router.navigate(['teacher'], { relativeTo: this.route });
-        } else if (role == 3) {
+        } else if (role == 4) {
           this.router.navigate(['student'], { relativeTo: this.route });
         }
       });

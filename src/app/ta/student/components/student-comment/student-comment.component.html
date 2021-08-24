@@ -1,0 +1,16 @@
+<div class="ml-8 mt-2 mr-4">
+  <nz-table #currenCommentInTable [nzPageSize]="5" [nzData]='commentList!'>
+    <thead>
+      <tr>
+        <th>留言内容</th>
+        <th>留言时间</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of currenCommentInTable.data">
+        <td>{{ data.comment }}</td>
+        <td>{{ formatDateTime(data.date) }} </td>
+      </tr>
+    </tbody>
+  </nz-table>
+</div>

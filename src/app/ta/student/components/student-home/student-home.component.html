@@ -1,7 +1,7 @@
 <div class="ml-16 mt-10 ">
   <div class="h-64 w-120 float-left border-antd border-solid border-2 p-6 rounded-lg">
     <div class="mt-3 mb-4">
-      <span class="text-2xl">当前毕业设计双选 : </span>
+      <span class="text-2xl">当前统考复试 : </span>
       <span class="text-3xl font-bold" nz-typography
         [nzType]='AntdStatus(currentStatus)'>{{status[currentStatus]}}</span>
     </div>
@@ -19,15 +19,17 @@
 
   <div class="h-64 w-120 float-left ml-36 border-antd border-solid border-2 p-6 rounded-lg text-center">
     <h3 nz-typography>学生端功能导航</h3>
-    <button nz-button class="mb-4 mt-2" [nzSize]='"large"' nzType="default" routerLink="../personal"
-      routerLinkActive="active">个人信息</button>
-    <br>
-    <button nz-button class="mb-4 " [nzSize]='"large"' nzType="default" routerLink="../teacher"
-      routerLinkActive="active">教师查询</button>
 
-    <button nz-button class="mb-4 ml-16" [nzSize]='"large"' nzType="default" routerLink="../request"
-      routerLinkActive="active">提交申请</button>
+    <button nz-button class="mb-4 mt-2 w-32" [nzSize]='"large"' nzType="default" routerLink="../personal"
+      routerLinkActive="active">个人信息</button>
+
+    <button nz-button class="mb-4  w-32 ml-8" [nzSize]='"large"' nzType="default" routerLink="../upload"
+      routerLinkActive="active">上传材料</button>
     <br>
-    <button nz-button class="mb-4" [nzSize]='"large"' nzType="default" routerLink="../application"
-      routerLinkActive="active">我的申请</button>
+    <button nz-button class="mb-4 mt-2  w-32" [nzSize]='"large"' nzType="default" routerLink="../comment"
+      routerLinkActive="active">查看材料反馈</button>
+
+    <button nz-button class="mb-4  w-32 ml-8" [nzSize]='"large"' nzType="default" routerLink="../score"
+      routerLinkActive="active">成绩查询</button>
+
   </div>

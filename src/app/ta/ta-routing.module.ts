@@ -3,18 +3,11 @@ import { RouterModule, Routes } from '@angular/router';
 import { TARedirectComponent } from './components/ta-redirect/ta-redirect.component';
 import { AdminGuard } from './services/admin.guard';
 import { StudentGuard } from './services/student.guard';
-import { TeacherGuard } from './services/teacher.guard';
 
 const routes: Routes = [
   {
     path: '',
     component: TARedirectComponent,
-  },
-  {
-    path: 'teacher',
-    canActivate: [TeacherGuard],
-    loadChildren: () =>
-      import('./teacher/teacher.module').then((mod) => mod.TeacherModule),
   },
   {
     path: 'student',

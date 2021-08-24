@@ -27,8 +27,8 @@ export class StudentGuard implements CanActivate {
     return this.userServ.memberRole$.pipe(
       skipWhile((v) => v == -1),
       map((role) => {
-        if (role == 3) {
-          console.log('ta/student.guard: role=3 : true(default)');
+        if (role == 4) {
+          console.log('ta/student.guard: role=4 : true(default)');
           return true;
         } else {
           this.message.error('您无权进入此版块');

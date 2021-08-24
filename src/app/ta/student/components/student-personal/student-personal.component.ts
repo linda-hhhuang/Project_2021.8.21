@@ -49,10 +49,29 @@ export class StudentPersonalComponent implements OnInit {
         this.message.success(response.msg);
         this.isOkLoadingUpdateInfo = false;
         this.isVisibleUpdateInfo = false;
+        this.init();
       });
   }
   handleCancelUpdateInfo(): void {
     console.log('Button cancel clicked!');
     this.isVisibleUpdateInfo = false;
   }
+
+  beforeUpload = (file: any): boolean => {
+    if (file) {
+      const reader: FileReader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = (e: any) => {
+        const bstr = reader.result!;
+        console.log('upload sign', file.size);
+        const isLt2M = file.size / 1024 < 100;
+        if (!isLt2M) {
+          this.message.error('图片大小需小于100KB!');
+        } else {
+          this.currentStudentInfo.sign = String(bstr);
+        }
+      };
+    }
+    return false;
+  };
 }

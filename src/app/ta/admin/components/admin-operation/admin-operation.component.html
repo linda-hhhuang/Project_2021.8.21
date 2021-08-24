@@ -1,18 +1,18 @@
 <div class="ml-8">
   <!-- 展示当前申请表格 -->
   <h3 nz-typography class="">当前申请</h3>
-  <nz-table #currentRequestInTable [nzPageSize]="10" nzShowQuickJumper [nzData]='currentDisplayRequestList!'>
+  <nz-table #currentRequestInTable [nzPageSize]="10" nzShowQuickJumper [nzData]='currentDisplayStudentList!'>
     <thead>
       <tr>
-        <th nzCustomFilter>申请学生
+        <th>姓名</th>
+        <th nzCustomFilter>准考证号
           <nz-filter-trigger [(nzVisible)]="visibleSearchSid" [nzActive]="searchSidValue.length > 0"
             [nzDropdownMenu]="searchSidMenu">
             <i nz-icon nzType="filter" nzTheme="twotone"></i>
           </nz-filter-trigger>
         </th>
-        <th>申请教师</th>
-        <th>申请教师类型</th>
-        <th>教师是否通过申请</th>
+        <th>性别</th>
+        <th>初试分数</th>
         <th>申请状态
           <nz-filter-trigger [(nzVisible)]="visibleSearchStatus" [nzDropdownMenu]="searchStatusMenu">
             <i nz-icon nzType="filter" nzTheme="twotone"></i>
@@ -23,20 +23,22 @@
     </thead>
     <tbody>
       <tr *ngFor="let data of currentRequestInTable.data">
-        <td>{{ data.Student.name }} ({{ data.Student.sid }})</td>
-        <td *ngIf="data.manual">{{ data.manualTeacher }} </td>
-        <td *ngIf="!data.manual">{{ data.Teacher.name }} ({{ data.Teacher.sid}})</td>
-        <td>{{ data.manual?'校外教师':'校内教师' }}</td>
-        <td>{{ data.pass?"通过":"暂未通过"}}</td>
-        <td>{{ data.isDeleted?'已删除':'进行中' }}</td>
+        <td>{{ data.name }} </td>
+        <td>{{ data.sid }}</td>
+        <td>{{ data.sex }} </td>
+        <td>{{ data.score1 }}</td>
+        <td>{{ Status(data.pass)}}</td>
         <td>
-          <a nz-button nzType="link" (click)="showModalShowInfo(data)" *ngIf="!data.manual">查看完整申请信息</a>
-          <nz-divider nzType="vertical" *ngIf="!data.manual"></nz-divider>
-          <a nz-button nzType="link" nz-popconfirm nzPopconfirmTitle="确定要通过此申请吗?" nzPopconfirmPlacement="bottom"
-            (nzOnConfirm)="passConfirm(data)" (nzOnCancel)="Cancel()" nzOkText="确认通过" nzCancelText="取消">代替教师强制通过此申请</a>
+          <a nz-button nzType="link" (click)="showModalShowUpload(data)">查看/操作学生上传材料</a>
           <nz-divider nzType="vertical"></nz-divider>
-          <a nz-button nzType="link" nz-popconfirm nzPopconfirmTitle="确定不通过此申请吗?" nzPopconfirmPlacement="bottom"
-            (nzOnConfirm)="deleteConfirm(data)" (nzOnCancel)="Cancel()" nzOkText="确认不通过" nzCancelText="取消">强制删除此申请</a>
+          <a nz-button nzType="link" (click)="showModalShowInfo(data)">查看完整学生信息</a>
+          <nz-divider nzType="vertical"></nz-divider>
+          <a nz-button nzType="link" (click)="showModalShowComment(data)">留言/查看历史留言</a>
+          <nz-divider nzType="vertical"></nz-divider>
+          <a nz-button nzType="link" nz-popconfirm nzPopconfirmTitle="确定要删除此学生吗?" nzPopconfirmPlacement="bottom"
+            (nzOnConfirm)="deleteConfirm(data)" (nzOnCancel)="Cancel()" nzOkText="确认删除" nzCancelText="取消">删除学生</a>
+          <nz-divider nzType="vertical"></nz-divider>
+
         </td>
       </tr>
     </tbody>
@@ -54,66 +56,6 @@
       </div>
     </div>
   </nz-dropdown-menu>
-
-  <!-- 查看完整信息的对话框 -->
-  <nz-modal [nzStyle]="{ width: '80%' }" [(nzVisible)]="isVisibleShowInfo" nzTitle="查看申请信息"
-    (nzOnOk)="handleOkShowInfo()" (nzOnCancel)="handleOkShowInfo()" [nzOkLoading]="isOkLoadingShowInfo">
-    <ng-container *nzModalContent>
-
-      <nz-descriptions nzTitle="申请相关信息" nzBordered class="mt-4">
-        <nz-descriptions-item nzTitle="申请id">{{currentSelectedRequest.rid}}</nz-descriptions-item>
-        <nz-descriptions-item nzTitle="是否已删除">{{currentSelectedRequest.isDeleted?'是':'否'}}</nz-descriptions-item>
-        <nz-descriptions-item nzTitle="教师是否已通过">{{currentSelectedRequest.pass?'是':'否'}}</nz-descriptions-item>
-        <nz-descriptions-item nzTitle="教师是否为校外教师">{{currentSelectedRequest.manual?'是':'否'}}</nz-descriptions-item>
-      </nz-descriptions>
-
-      <nz-descriptions nzTitle="申请课程教师信息" nzBordered class="mt-4">
-        <nz-descriptions-item nzTitle="工号">{{currentSelectedRequest.Teacher.sid}}
-        </nz-descriptions-item>
-        <nz-descriptions-item nzTitle="姓名">{{currentSelectedRequest.Teacher.name}}
-        </nz-descriptions-item>
-        <nz-descriptions-item nzTitle="联系方式">{{currentSelectedRequest.Teacher.contact}}
-        </nz-descriptions-item>
-        <nz-descriptions-item nzTitle="研究所">{{currentSelectedRequest.Teacher.institute}}
-        </nz-descriptions-item>
-        <nz-descriptions-item nzTitle="院系">{{currentSelectedRequest.Teacher.department}}
-        </nz-descriptions-item>
-        <nz-descriptions-item nzTitle="单位">{{currentSelectedRequest.Teacher.organization}}
-        </nz-descriptions-item>
-        <nz-descriptions-item nzTitle="职称">{{currentSelectedRequest.Teacher.job}}
-        </nz-descriptions-item>
-        <nz-descriptions-item nzTitle="研究方向">{{currentSelectedRequest.Teacher.direction}}
-        </nz-descriptions-item>
-        <nz-descriptions-item nzTitle="招收学生数">{{currentSelectedRequest.Teacher.maxRes}}
-        </nz-descriptions-item>
-      </nz-descriptions>
-
-      <nz-descriptions nzTitle="申请学生信息" nzBordered class="mt-4">
-        <nz-descriptions-item nzTitle="学号">{{currentSelectedRequest.Student.sid}}</nz-descriptions-item>
-        <nz-descriptions-item nzTitle="姓名">{{currentSelectedRequest.Student.name}}</nz-descriptions-item>
-        <nz-descriptions-item nzTitle="专业">{{currentSelectedRequest.Student.major}}</nz-descriptions-item>
-        <nz-descriptions-item nzTitle="院系">{{currentSelectedRequest.Student.department}}</nz-descriptions-item>
-        <nz-descriptions-item nzTitle="学科门类">{{currentSelectedRequest.Student.field}}</nz-descriptions-item>
-        <nz-descriptions-item nzTitle="是否双学位">{{currentSelectedRequest.Student.doubleDegree?'是':'否'}}
-        </nz-descriptions-item>
-        <nz-descriptions-item nzTitle="双学位所在专业">{{currentSelectedRequest.Student.doubleDegreeMajor}}
-        </nz-descriptions-item>
-        <nz-descriptions-item nzTitle="双学位所在院系">{{currentSelectedRequest.Student.doubleDegreeDepartment}}
-        </nz-descriptions-item>
-        <nz-descriptions-item nzTitle="最大申请数">{{currentSelectedRequest.Student.maxReq}}</nz-descriptions-item>
-        <nz-descriptions-item nzTitle="论文选题">{{currentSelectedRequest.Student.topicName}}</nz-descriptions-item>
-        <nz-descriptions-item nzTitle="论文选题类型">{{currentSelectedRequest.Student.topicType}}</nz-descriptions-item>
-        <nz-descriptions-item nzTitle="是否社会实践类">{{currentSelectedRequest.Student.topicSocialExp?'是':'否' }}
-        </nz-descriptions-item>
-        <nz-descriptions-item nzTitle="个人介绍">{{currentSelectedRequest.Student.info}}</nz-descriptions-item>
-      </nz-descriptions>
-
-    </ng-container>
-    <div *nzModalFooter>
-      <button nz-button nzType="default" (click)="handleOkShowInfo()">退出</button>
-    </div>
-  </nz-modal>
-
   <!-- 申请状态的搜索的下拉框 -->
   <nz-dropdown-menu #searchStatusMenu="nzDropdownMenu">
     <div class="ant-table-filter-dropdown">
@@ -129,4 +71,103 @@
       </div>
     </div>
   </nz-dropdown-menu>
+
+  <!-- 查看完整信息的对话框 -->
+  <nz-modal [nzStyle]="{ width: '60%' }" [(nzVisible)]="isVisibleShowInfo" nzTitle="查看学生信息"
+    (nzOnOk)="handleOkShowInfo()" (nzOnCancel)="handleOkShowInfo()" [nzOkLoading]="isOkLoadingShowInfo">
+    <ng-container *nzModalContent>
+      <nz-descriptions nzTitle="" nzBordered>
+        <nz-descriptions-item nzTitle="姓名" nzSpan="1">
+          {{currentSelectedStudent.name}} </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="准考证号" nzSpan="2">
+          {{currentSelectedStudent.sid}} </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="性别" nzSpan="1">
+          {{currentSelectedStudent.sex}}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="联系电话" nzSpan="2">
+          {{currentSelectedStudent.phone}}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="初试分数" nzSpan="1">
+          {{currentSelectedStudent.score1}}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="复试分数" nzSpan="1">
+          {{currentSelectedStudent.score2}}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="录取结果" nzSpan="1">
+          {{currentSelectedStudent.result}}
+        </nz-descriptions-item>
+      </nz-descriptions>
+    </ng-container>
+    <div *nzModalFooter>
+      <button nz-button nzType="default" (click)="handleOkShowInfo()">退出</button>
+    </div>
+  </nz-modal>
+
+  <!-- 查看留言的对话框 -->
+  <nz-modal [nzStyle]="{ width: '60%' }" [(nzVisible)]="isVisibleShowComment" nzTitle="查看学生历史留言"
+    (nzOnOk)="handleOkShowComment()" (nzOnCancel)="handleOkShowComment()" [nzOkLoading]="isOkLoadingShowComment">
+    <ng-container *nzModalContent>
+      <nz-table #currenCommentInTable [nzPageSize]="5" [nzData]='commentList!'>
+        <thead>
+          <tr>
+            <th>留言内容</th>
+            <th>留言时间</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let data of currenCommentInTable.data">
+            <td>{{ data.comment }}</td>
+            <td>{{ formatDateTime(data.date) }} </td>
+          </tr>
+        </tbody>
+      </nz-table>
+      <div><textarea rows="4" nz-input [(ngModel)]="commentValue"></textarea></div>
+      <button class="mt-2 h-10 w-44" nz-button [nzType]="'primary'"
+        (click)="comment(currentSelectedStudent,commentValue)"><span>给学生留言</span></button>
+    </ng-container>
+    <div *nzModalFooter>
+      <button nz-button nzType="default" (click)="handleOkShowComment()">退出</button>
+    </div>
+  </nz-modal>
+
+  <!-- 上传的对话框 -->
+  <nz-modal [nzStyle]="{ width: '60%' }" [(nzVisible)]="isVisibleShowUpload" nzTitle="查看/处理学生上传材料"
+    (nzOnOk)="handleOkShowUpload()" (nzOnCancel)="handleOkShowUpload()" [nzOkLoading]="isOkLoadingShowUpload">
+    <ng-container *nzModalContent>
+      <span nz-typography nzType="danger" class="font-bold">请教务务必确认学生上传了已经签名的诚信考生承诺书才得通过学生的材料审核！</span>
+      <nz-table #currenUploadInTable [nzPageSize]="5" [nzData]='fileList!' class="mt-4">
+        <thead>
+          <tr>
+            <th>文件名</th>
+            <th>上传时间</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let data of currenUploadInTable.data">
+            <td>{{ data.filename }}</td>
+            <td>{{ formatDateTime(data.date) }} </td>
+            <td>
+              <a nz-button nzType="link" (click)="downloadUpload(data)">下载</a>
+              <nz-divider nzType="vertical"></nz-divider>
+            </td>
+          </tr>
+        </tbody>
+      </nz-table>
+      <button class="mt-2 h-10 w-60" nz-button nzType="primary" nz-popconfirm nzPopconfirmTitle="确定通过此学生材料审核吗?"
+        nzPopconfirmPlacement="bottom" (nzOnConfirm)="pass(currentSelectedStudent)" (nzOnCancel)="Cancel()"
+        nzOkText="确认审核通过" nzCancelText="取消">通过此学生材料审核</button>
+      <br>
+      <button class="mt-2 h-10 w-60" nz-button [nzType]="'primary'"
+        (click)="isReject=true"><span>拒绝此学生材料审核并留言</span></button>
+      <div *ngIf="isReject" class="text-center">
+        <textarea rows="4" nz-input [(ngModel)]="commentValue" class="mt-2 mb-2"></textarea>
+        <button class="mt-2 h-10 w-44 ml-" nz-button [nzType]="'primary'"
+          (click)="reject(currentSelectedStudent,commentValue)"><span>上传留言并确认拒绝</span></button>
+      </div>
+    </ng-container>
+    <div *nzModalFooter>
+      <button nz-button nzType="default" (click)="handleOkShowUpload()">退出</button>
+    </div>
+  </nz-modal>
 </div>

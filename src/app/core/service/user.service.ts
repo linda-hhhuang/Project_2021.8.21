@@ -4,7 +4,7 @@ import { tap, finalize } from 'rxjs/operators';
 import { ApiService } from './api.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 
-//做有关用户操作的函数以及用户和毕业设计双选成员验证
+//做有关用户操作的函数以及用户和统考复试成员验证
 
 @Injectable({
   providedIn: 'root',
@@ -68,7 +68,7 @@ export class UserService {
     this.isLoading.next(true);
 
     if (this.user.value.role == 0 || this.user.value.role == 1) {
-      return this.api.get<any>('/member/list').pipe(
+      return this.api.get<any>('/eduadmin/list').pipe(
         tap({
           next: (response) => {
             this.memberlist.next(response.body);
@@ -83,31 +83,13 @@ export class UserService {
           this.memberRole.next(this.user.value.role);
         })
       );
-    } else if (this.user.value.role == 2) {
-      return this.api.get<any>('/member/teacher/me').pipe(
-        tap({
-          next: (response) => {
-            this.member.next(response.body);
-            console.log('in user member init 2', response);
-            this.hasmember = response.body !== null ? 1 : 0;
-          },
-          error: (err) => {
-            this.hasmember = 0;
-            this.handleError(err.error.msg);
-          },
-        }),
-        finalize(() => {
-          this.isLoading.next(false);
-          this.memberRole.next(this.user.value.role);
-        })
-      );
-    } else if (this.user.value.role == 3) {
-      return this.api.get<any>('/member/student/me').pipe(
+    } else if (this.user.value.role == 4) {
+      return this.api.get<any>('student/me').pipe(
         tap({
           next: (response) => {
             this.member.next(response.body);
             this.hasmember = response.body !== null ? 1 : 0;
-            console.log('in user member init 3', response);
+            console.log('in user member init 4', response);
           },
           error: (err) => {
             this.hasmember = 0;
@@ -120,7 +102,6 @@ export class UserService {
         })
       );
     }
-
     console.log('member null error!!');
     return new Observable<any>();
   }

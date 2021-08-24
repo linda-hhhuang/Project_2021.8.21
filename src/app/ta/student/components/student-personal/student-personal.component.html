@@ -2,57 +2,43 @@
   (click)="showModalUpdateInfo()"><span>查看/修改个人信息</span></button>
 
 <!-- 修改个人信息的对话框 -->
-<nz-modal [nzStyle]="{ width: '80%' }" [(nzVisible)]="isVisibleUpdateInfo" nzTitle="查看/修改个人信息"
+<nz-modal [nzStyle]="{ width: '60%' }" [(nzVisible)]="isVisibleUpdateInfo" nzTitle="查看/修改个人信息"
   (nzOnCancel)="handleCancelUpdateInfo()" (nzOnOk)="handleOkUpdateInfo()" [nzOkLoading]="isOkLoadingUpdateInfo">
   <ng-container *nzModalContent>
     <nz-descriptions nzTitle="" nzBordered>
-      <nz-descriptions-item nzTitle="学号">
-        {{currentStudentInfo.sid}} </nz-descriptions-item>
-      <nz-descriptions-item nzTitle="姓名">
+      <nz-descriptions-item nzTitle="姓名" nzSpan="1">
         {{currentStudentInfo.name}} </nz-descriptions-item>
-      <nz-descriptions-item nzTitle="专业">
-        <input nz-input [(ngModel)]="currentStudentInfo.major" />
+      <nz-descriptions-item nzTitle="准考证号" nzSpan="2">
+        {{currentStudentInfo.sid}} </nz-descriptions-item>
+      <nz-descriptions-item nzTitle="性别" nzSpan="1">
+        {{currentStudentInfo.sex}}
       </nz-descriptions-item>
-      <nz-descriptions-item nzTitle="院系">
-        {{currentStudentInfo.department}} </nz-descriptions-item>
-      <nz-descriptions-item nzTitle="学科门类">
-        <input nz-input [(ngModel)]="currentStudentInfo.field" />
+      <nz-descriptions-item nzTitle="电话" nzSpan="2">
+        <input class="w-44 mb-2 block" nz-input [(ngModel)]="currentStudentInfo.phone" />
       </nz-descriptions-item>
-      <nz-descriptions-item nzTitle="最大申请数">
-        {{currentStudentInfo.maxReq}} </nz-descriptions-item>
+      <nz-descriptions-item nzTitle="初试分数" nzSpan="3">
+        {{currentStudentInfo.score1}}
+      </nz-descriptions-item>
+      <!-- <nz-descriptions-item nzTitle="签名" nzSpan="3">
+        <div *ngIf="currentStudentInfo.sign!.slice(0,10)=='data:image'"><img src="{{currentStudentInfo.sign}}"
+            class="border-gray-400 border-solid max-h-16 w-auto h-auto">
+        </div>
+        <nz-upload [nzLimit]='1' [nzMultiple]="true" [nzBeforeUpload]="beforeUpload"
+          *ngIf="currentStudentInfo.sign==''">
+          <button nz-button>
+            <i nz-icon nzType="upload"></i>
+            <span>选择要上传的签名(图片)</span>
+          </button>
+        </nz-upload>
+        <nz-upload [nzLimit]='1' [nzMultiple]="true" [nzBeforeUpload]="beforeUpload"
+          *ngIf="currentStudentInfo.sign!=''">
+          <button nz-button>
+            <i nz-icon nzType="upload"></i>
+            <span>修改签名(上传图片)</span>
+          </button>
+        </nz-upload>
+      </nz-descriptions-item> -->
 
-      <nz-descriptions-item nzTitle="是否双学位">
-        <nz-radio-group [(ngModel)]="currentStudentInfo.doubleDegree">
-          <label nz-radio [nzValue]='true'>是</label>
-          <label nz-radio [nzValue]='false'>否</label>
-        </nz-radio-group>
-      </nz-descriptions-item>
-
-      <nz-descriptions-item nzTitle="双学位所在专业">
-        <input nz-input *ngIf="currentStudentInfo.doubleDegree" [(ngModel)]="currentStudentInfo.doubleDegreeMajor" />
-      </nz-descriptions-item>
-
-      <nz-descriptions-item nzTitle="双学位所在院系">
-        <input nz-input *ngIf="currentStudentInfo.doubleDegree"
-          [(ngModel)]="currentStudentInfo.doubleDegreeDepartment" />
-      </nz-descriptions-item>
-
-      <nz-descriptions-item nzTitle="论文选题">
-        <input nz-input [(ngModel)]="currentStudentInfo.topicName" />
-      </nz-descriptions-item>
-      <nz-descriptions-item nzTitle="论文选题类型">
-        <input nz-input [(ngModel)]="currentStudentInfo.topicType" />
-      </nz-descriptions-item>
-      <nz-descriptions-item nzTitle="是否社会实践类">
-        <nz-radio-group [(ngModel)]="currentStudentInfo.topicSocialExp">
-          <label nz-radio [nzValue]='true'>是</label>
-          <label nz-radio [nzValue]='false'>否</label>
-        </nz-radio-group>
-      </nz-descriptions-item>
-
-      <nz-descriptions-item nzTitle="个人介绍" [nzSpan]="3">
-        <textarea rows="4" nz-input [(ngModel)]="currentStudentInfo.info"></textarea>
-      </nz-descriptions-item>
     </nz-descriptions>
 
   </ng-container>

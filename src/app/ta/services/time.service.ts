@@ -32,7 +32,7 @@ export class TimeService {
   }
 
   getTime() {
-    return this.api.get<any>('/member/timerange').pipe(
+    return this.api.get<any>('/timerange').pipe(
       tap({
         next: (response) => {
           this.currentTimeFrom.next(Number(response.body.start));
@@ -52,7 +52,7 @@ export class TimeService {
 
   setTime(from: number, to: number) {
     return this.api
-      .post<any>('/member/timerange', {
+      .post<any>('/timerange', {
         start: from,
         end: to,
       })
