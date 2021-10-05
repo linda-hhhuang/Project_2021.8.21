@@ -1,6 +1,6 @@
 {
   "/api/**": {
-    "target": "http://timzhong.top:31003",
+    "target": "http://172.18.198.146:6005",
     "secure": true,
     "changeOrigin": true,
     "cookieDomainRewrite": "",
