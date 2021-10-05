@@ -3,7 +3,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { tap, finalize } from 'rxjs/operators';
 import { ApiService } from '@core/service/api.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { Request } from '@ta/model/request';
+// import { Request } from '@ta/model/request';
 @Injectable({
   providedIn: 'root',
 })
@@ -30,7 +30,6 @@ export class RequestService {
       tap({
         next: (response) => {
           this.requestList.next(response.body.Requests);
-          console.log('in request service getRequest', response);
         },
         error: (err) => {
           this.handleError(err.error.msg);
@@ -44,7 +43,6 @@ export class RequestService {
       tap({
         next: (response) => {
           this.getRequest().subscribe();
-          console.log('in request service deleteRequest ok', response);
         },
         error: (err) => {
           this.handleError(err.error.msg);
@@ -62,7 +60,6 @@ export class RequestService {
         tap({
           next: (response) => {
             this.getRequest().subscribe();
-            console.log('in request service postRequest ok', response);
           },
           error: (err) => {
             this.handleError(err.error.msg);
@@ -80,7 +77,6 @@ export class RequestService {
         tap({
           next: (response) => {
             this.getRequest().subscribe();
-            console.log('in request service postRequest ok', response);
           },
           error: (err) => {
             this.handleError(err.error.msg);
@@ -99,7 +95,6 @@ export class RequestService {
         tap({
           next: (response) => {
             this.getRequest().subscribe();
-            console.log('in request service postRequest ok', response);
           },
           error: (err) => {
             this.handleError(err.error.msg);

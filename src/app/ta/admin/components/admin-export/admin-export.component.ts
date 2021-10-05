@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { MemberService } from '@ta/services/member.service';
-import { filter, map } from 'rxjs/operators';
 import { Student } from '@ta/model/member';
 @Component({
   selector: 'app-admin-export',

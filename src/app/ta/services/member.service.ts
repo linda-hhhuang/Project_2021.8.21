@@ -40,7 +40,6 @@ export class MemberService {
       tap({
         next: (response) => {
           this.studentList.next(response.body);
-          console.log('in member service deleteMember ok', response);
         },
         error: (err) => {
           this.handleError(err.error.msg);
@@ -54,7 +53,6 @@ export class MemberService {
       tap({
         next: (response) => {
           this.memberlistInit().subscribe();
-          console.log('in member service deleteMember ok', response);
         },
         error: (err) => {
           this.handleError(err.error.msg);
@@ -68,7 +66,6 @@ export class MemberService {
       tap({
         next: (response) => {
           this.currentStudent.next(response.body);
-          console.log('in member service getStudent ok', response);
         },
         error: (err) => {
           this.handleError(err.error.msg);
@@ -81,7 +78,6 @@ export class MemberService {
     return this.api.put<any>(`/eduadmin/${sid}/pass`, null).pipe(
       tap({
         next: (response) => {
-          console.log('in member service passUpload', response);
           this.memberlistInit().subscribe();
         },
         error: (err) => {
@@ -100,7 +96,6 @@ export class MemberService {
       .pipe(
         tap({
           next: (response) => {
-            console.log('in member service rejectUpload', response);
             this.memberlistInit().subscribe();
           },
           error: (err) => {
@@ -115,7 +110,6 @@ export class MemberService {
       tap({
         next: (response) => {
           this.fileList.next(response.body);
-          console.log('in member service getStudent ok', response);
         },
         error: (err) => {
           this.handleError(err.error.msg);
@@ -130,7 +124,7 @@ export class MemberService {
     //   tap({
     //     next: (response) => {
     //       // this.fileList.next(response.body);
-    //       // console.log('in member service getStudent ok', response);
+    //       //
     //     },
     //     error: (err) => {
     //       this.handleError(err.error.msg);
@@ -147,9 +141,7 @@ export class MemberService {
       })
       .pipe(
         tap({
-          next: (response) => {
-            console.log('in member service rejectUpload', response);
-          },
+          next: (response) => {},
           error: (err) => {
             this.handleError(err.error.msg);
           },
@@ -160,9 +152,7 @@ export class MemberService {
   getComment(sid: number) {
     return this.api.get<any>(`/eduadmin/${sid}/comments`).pipe(
       tap({
-        next: (response) => {
-          console.log('in member service getComment', response);
-        },
+        next: (response) => {},
         error: (err) => {
           this.handleError(err.error.msg);
         },
@@ -179,7 +169,6 @@ export class MemberService {
     return this.api.get<any>('/student/me').pipe(
       tap({
         next: (response) => {
-          console.log('in member service getStudentInfo', response);
           this.currentStudent.next(response.body);
         },
         error: (err) => {
@@ -199,7 +188,6 @@ export class MemberService {
         tap({
           next: (response) => {
             this.currentStudent.next(response.body);
-            console.log('in member service updateStudentInfo ok', response);
           },
           error: (err) => {
             this.handleError(err.error.msg);
@@ -212,8 +200,7 @@ export class MemberService {
     return this.api.post<any>('/student/me/files', data).pipe(
       tap({
         next: (response) => {
-          this.currentStudent.next(response.body);
-          console.log('in member service updateStudentInfo ok', response);
+          this.getUploadFileList().subscribe();
         },
         error: (err) => {
           this.handleError(err.error.msg);
@@ -227,7 +214,6 @@ export class MemberService {
       tap({
         next: (response) => {
           this.fileList.next(response.body);
-          console.log('in member service getUploadFileList ok', response);
         },
         error: (err) => {
           this.handleError(err.error.msg);
@@ -241,7 +227,6 @@ export class MemberService {
       tap({
         next: (response) => {
           this.getUploadFileList().subscribe();
-          console.log('in member service deleteUpload ok', response);
         },
         error: (err) => {
           this.handleError(err.error.msg);
@@ -257,9 +242,7 @@ export class MemberService {
   studentGetComment() {
     return this.api.get<any>(`/student/me/comments`).pipe(
       tap({
-        next: (response) => {
-          console.log('in member service getCommemt ok', response);
-        },
+        next: (response) => {},
         error: (err) => {
           this.handleError(err.error.msg);
         },

@@ -23,7 +23,6 @@ export class StudentPersonalComponent implements OnInit {
   init() {
     this.memberSrvc.getStudentInfo().subscribe((student) => {
       this.currentStudentInfo = student.body;
-      console.log('in student-personal ngOnInit, data is ', student);
     });
   }
   ngOnInit(): void {
@@ -35,14 +34,13 @@ export class StudentPersonalComponent implements OnInit {
     this.memberSrvc.currentStudent$
       .pipe(filter((v) => v != null))
       .subscribe((v) => {
-        console.log('in showModalUpdateInfo', v);
         this.isVisibleUpdateInfo = true;
         this.currentStudentInfo = v!;
       });
   }
   handleOkUpdateInfo(): void {
     this.isOkLoadingUpdateInfo = true;
-    console.log('in handleOkUpdateInfo, data is ', this.currentStudentInfo);
+
     this.memberSrvc
       .updateStudentInfo(this.currentStudentInfo)
       .subscribe((response) => {
@@ -53,7 +51,6 @@ export class StudentPersonalComponent implements OnInit {
       });
   }
   handleCancelUpdateInfo(): void {
-    console.log('Button cancel clicked!');
     this.isVisibleUpdateInfo = false;
   }
 
@@ -63,7 +60,7 @@ export class StudentPersonalComponent implements OnInit {
       reader.readAsDataURL(file);
       reader.onload = (e: any) => {
         const bstr = reader.result!;
-        console.log('upload sign', file.size);
+
         const isLt2M = file.size / 1024 < 100;
         if (!isLt2M) {
           this.message.error('图片大小需小于100KB!');

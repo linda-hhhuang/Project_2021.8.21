@@ -62,7 +62,6 @@ export class AdminOperationComponent implements OnInit {
   }
 
   showModalShowInfo(e: Student) {
-    console.log('in ShowInfo ', e);
     this.memberSrvc.getStudent(e.sid).subscribe((v) => {
       this.currentSelectedStudent = v.body;
       this.isVisibleShowInfo = true;
@@ -73,7 +72,6 @@ export class AdminOperationComponent implements OnInit {
   }
 
   showModalShowComment(e: Student) {
-    console.log('in ShowComment ', e);
     this.currentSelectedStudent = e;
     this.commentValue = '无评论';
     this.memberSrvc.getComment(e.sid).subscribe((v) => {
@@ -87,7 +85,6 @@ export class AdminOperationComponent implements OnInit {
   }
 
   showModalShowUpload(e: Student) {
-    console.log('in ShowUpload ', e);
     this.currentSelectedStudent = e;
     this.isReject = false;
     this.commentValue = '无评论';

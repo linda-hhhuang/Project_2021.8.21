@@ -32,7 +32,6 @@ export class RequestService {
       tap({
         next: (response) => {
           this.requestList.next(response.body);
-          console.log('in Request service getRequest', response);
         },
         error: (err) => {
           this.handleError(err.error.msg);
@@ -46,7 +45,6 @@ export class RequestService {
       tap({
         next: (response) => {
           this.getRequest().subscribe();
-          console.log('in Request service passRequest ok', response);
         },
         error: (err) => {
           this.handleError(err.error.msg);
@@ -60,7 +58,6 @@ export class RequestService {
       tap({
         next: (response) => {
           this.getRequest().subscribe();
-          console.log('in Request service deleteRequest ok', response);
         },
         error: (err) => {
           this.handleError(err.error.msg);

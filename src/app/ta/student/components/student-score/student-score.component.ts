@@ -23,7 +23,6 @@ export class StudentScoreComponent implements OnInit {
   init() {
     this.memberSrvc.getStudentInfo().subscribe((student) => {
       this.currentStudentInfo = student.body;
-      console.log('in student-personal ngOnInit, data is ', student);
     });
   }
   ngOnInit(): void {
@@ -35,7 +34,6 @@ export class StudentScoreComponent implements OnInit {
     this.memberSrvc.currentStudent$
       .pipe(filter((v) => v != null))
       .subscribe((v) => {
-        console.log('in showModalScore', v);
         this.isVisibleScore = true;
         this.currentStudentInfo = v!;
       });

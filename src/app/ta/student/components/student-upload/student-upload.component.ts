@@ -49,7 +49,7 @@ export class StudentUploadComponent implements OnInit {
   }
   beforeUpload = (file: NzUploadFile): boolean => {
     // 对上传文件大小进行限制
-    console.log('file', file);
+
     const isLt10M = file.size! / 1024 / 1024 < 10;
     if (!isLt10M) {
       this.message.warning('文件必须在10M以内');
@@ -58,7 +58,7 @@ export class StudentUploadComponent implements OnInit {
       return false;
     }
     this.fileList = this.fileList.concat(file);
-    console.log('filelist', this.fileList);
+
     return false;
   };
 
@@ -68,7 +68,7 @@ export class StudentUploadComponent implements OnInit {
       this.uploading = true; // 修改上传按钮状态
       const formData = new FormData();
       formData.append('file', file);
-      console.log('in filelist foreach ', file);
+
       this.memberSrvc.uploadFile(formData).subscribe((_) => {
         this.uploading = false;
         this.message.success(
